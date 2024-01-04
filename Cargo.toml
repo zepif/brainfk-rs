@@ -1,0 +1,8 @@
+[package]
+name = "brainfk-rs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+llvm-sys = "100.2.4"
+inkwell = { version = "0.2.0", features = ["llvm10-0"] }
