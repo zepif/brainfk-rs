@@ -4,5 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-llvm-sys = "100.2.4"
-inkwell = { version = "0.2.0", features = ["llvm10-0"] }
+clap = { version = "4.4.16", features = ["derive"] }
+
+[build-dependencies]
+clap = { version = "4.4.16", features = ["derive"] }
+clap_mangen = "0.2.17"
+project-root = "0.2.2"

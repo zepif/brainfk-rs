@@ -1,5 +1,4 @@
 use std::fs;
-mod llvm_backend;
 mod bf_parser;
 
 fn main() {
@@ -7,7 +6,7 @@ fn main() {
     let module = context.create_module("brainfuck");
     let builder = context.create_builder();
 
-    let file_path = "./examples/in1.b";
+    let file_path = "./../brainfck//in1.b";
     let bf_code = match fs:read_to_string(file_path) {
         Ok(content) => content,
         Err(err) => {
