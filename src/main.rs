@@ -1,27 +1,27 @@
-use std::fs;
-mod bf_parser;
+mod ast;
+mod lexer;
+mod parser;
+mod token;
+
+use ast::AST;
+use lexer::Lexer;
+use parser::Parser;
 
 fn main() {
-    let context = inkwell::context::Context::create();
-    let module = context.create_module("brainfuck");
-    let builder = context.create_builder();
+    let cli = Cli::parse();
 
-    let file_path = "./../brainfck//in1.b";
-    let bf_code = match fs:read_to_string(file_path) {
-        Ok(content) => content,
-        Err(err) => {
-            eprintln!("Error reading brainfuck code from file {}: {}", file_path, err);
-            return;
-        }
-    };
-    
-    match bf_parser::parse_bs_code(&bf_code) {
-        Ok(ast) => llvm_backend::generate_llvm_ir(ast),
-        Err(err) => {
-            eprintln("Error parsing brainfuck code: {}", err);
-            return;
-        }
-    };
+    let compilation_paths = CompilationPaths::new(&cli.input_path, &output_path, !cli.keep_files);
 
-    module.println_to_file("output.ll").unwrap();
+    let source = fs::read_to_string(&compilation_paths.source_path).expect(&format!(
+        "Failed to read source {}",
+        compilation_paths.source_path.to_str().unwrap()
+    ));
+
+    let lexer = Lexer::new(source);
+    let ast = Parser::parse(lexer);
+
+    if cli.dump_ast {
+        println!("{:#?}", ast);
+        return;
+    }
 }
