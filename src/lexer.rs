@@ -80,7 +80,7 @@ impl Iterator for Lexer {
         }
 
         if let Some(value) = self.collect_token() {
-            some(value)
+            Some(value)
         } else {
             self.eof()
         }

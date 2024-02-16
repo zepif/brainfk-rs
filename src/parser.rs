@@ -40,7 +40,7 @@ impl Parser {
 
         while self.current != Token::EOF {
             match self.current {
-                Token::ADD => {
+                Token::Add => {
                     statments.push(AST::Add(self.capture_number_of_occurances(Token::Add)));
                     continue;
                 }
@@ -86,7 +86,7 @@ impl Parser {
     }
 
     pub fn parse_loop(&mut self) -> AST {
-        self.ear(Token::StartLoop);
+        self.eat(Token::StartLoop);
         let mut statments = vec![];
 
         while self.current != Token::EndLoop {
@@ -118,8 +118,10 @@ impl Parser {
                 Token::EndLoop => panic!("Unreachable"),
                 Token::EOF => panic!("Unexpected EOF"),
             }
+            self.advance();
         }
 
-        self.advance();
+        self.eat(Token::EndLoop);
+        AST::Loop(statments)
     }
 }

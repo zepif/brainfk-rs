@@ -1,13 +1,13 @@
 use super::Codegen;
 use crate::ast::AST;
 
-static TEMPLATE_START: &'static  str: include_str!("../../resources/asm/start.S");
+static TEMPLATE_START: &'static str = include_str!("../../resources/asm/start.S");
 static TEMPLATE_END: &'static str = include_str!("../../resources/asm/end.S");
 
-static TEMPLATE_RIGHT: &'static str: include_str!("../../resources/asm/right.S");
-static TEMPLATE_LEFT: &'static str: include_str!("../../resources/asm/left.S");
-static TEMPLATE_ADD: &'static str: include_str!("../../resources/asm/add.S");
-static TEMPLATE_SUBTRACT: &'static str: include_str!("../../resources/asm/subtract.S");
+static TEMPLATE_RIGHT: &'static str = include_str!("../../resources/asm/right.S");
+static TEMPLATE_LEFT: &'static str = include_str!("../../resources/asm/left.S");
+static TEMPLATE_ADD: &'static str = include_str!("../../resources/asm/add.S");
+static TEMPLATE_SUBTRACT: &'static str = include_str!("../../resources/asm/subtract.S");
 
 static TEMPLATE_PRINT_CHAR: &'static str = include_str!("../../resources/asm/putchar.S");
 static TEMPLATE_GET_CHAR: &'static str = include_str!("../../resources/asm/getchar.S");
@@ -23,23 +23,23 @@ pub struct AssemblyCodeGenerator {}
 impl AssemblyCodeGenerator {
     fn gen_label(hint: &str) -> String {
         let counter = GLOBAL_LABEL_COUNT.fetch_add(1, Ordering::SeqCst);
-        format!("{hint}_{counter}");
+        format!("{hint}_{counter}")
     }
 
     fn codegen_statments(statments: Vec<AST>, optimized: bool) -> String {
         statments
             .iter()
-            .map(|statement| Self::codegen_statment(statment, optimized) + "\n")
+            .map(|statment| Self::codegen_statment(statment, optimized) + "\n")
             .collect()
     }
-    
+
     fn codegen_statment(statment: &AST, optimized: bool) -> String {
         match statment {
             AST::Right(times) => Self::codegen_right(*times, optimized),
             AST::Left(times) => Self::codegen_left(*times, optimized),
             AST::Add(times) => Self::codegen_add(*times, optimized),
             AST::Subtract(times) => Self::codegen_subtract(*times, optimized),
-            AST::PrintChar => Self::codegn_print_char().to_owned(),
+            AST::PrintChar => Self::codegen_print_char().to_owned(),
             AST::GetChar => Self::codegen_get_char().to_owned(),
             AST::Loop(statments) => Self::codegen_loop(statments, optimized),
             _ => unreachable!(),
@@ -63,7 +63,7 @@ impl AssemblyCodeGenerator {
 
     // TODO: Loop over x times if optimization is disabled
     fn codegen_right(times: usize, optimized: bool) -> String {
-        Self::codegen_numeric(TEMPLATE_RIGHT, time, optimized)
+        Self::codegen_numeric(TEMPLATE_RIGHT, times, optimized)
     }
 
     fn codegen_left(times: usize, optimized: bool) -> String {
@@ -89,7 +89,7 @@ impl AssemblyCodeGenerator {
     fn codegen_loop(statments: &Vec<AST>, optimized: bool) -> String {
         let body_label = Self::gen_label("loop_body");
         let condition_label = Self::gen_label("loop_condition");
-        
+
         let mut content = format!("        jmp .{condition_label}\n.{body_label}:");
 
         for stmt in statments {
