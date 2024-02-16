@@ -23,5 +23,5 @@ Options:
 ## TODO
 
 * Better error handling
-* Remove `as` and `gcc` dependencies and start using `nasm` or `fasm`
+* Remove `as` dependence and start using `nasm` or `fasm`
 * Allow outputting as object file

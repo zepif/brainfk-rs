@@ -11,7 +11,7 @@ fn main() -> std::io::Result<()> {
     let mut buffer: Vec<u8> = Default::default();
     man.render(&mut buffer)?;
 
-    std::fs::write(out_dir.join("resources/man/rustfuck.1"), buffer)?;
+    std::fs::write(out_dir.join("resources/man/brainfk-rs.1"), buffer)?;
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=src/cli.rs");
     Ok(())
